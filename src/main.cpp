@@ -139,17 +139,20 @@ int intakeControl() {
       }
 
       //condition for reaching first checkpoint
-      if(intakeStopCondition == 1 && RangeFinderC.distance(distanceUnits::in) < 4) {
+      if(intakeStopCondition == 1 && RangeFinderC.distance(distanceUnits::in) < 4 && RangeFinderC.distance(distanceUnits::in) > 0.01) {
         runTheIntakes = false;
         runTheBottomRoller = false;
+        
       }
-      else if(intakeStopCondition == 2 && RangeFinderE.distance(distanceUnits::in) < 4) {
+      else if(intakeStopCondition == 2 && RangeFinderE.distance(distanceUnits::in) < 6 && RangeFinderE.distance(distanceUnits::in) > 0.01) {
         runTheIntakes = false;
         runTheBottomRoller = false;
+        runTheTopRoller = false;
       }
-      else if(intakeStopCondition == 3 && RangeFinderC.distance(distanceUnits::in) < 4 && RangeFinderE.distance(distanceUnits::in) < 4) {
+      else if(intakeStopCondition == 3 && RangeFinderC.distance(distanceUnits::in) < 6 && RangeFinderC.distance(distanceUnits::in) > 0.01 && RangeFinderE.distance(distanceUnits::in) < 3 && RangeFinderE.distance(distanceUnits::in) > 0.01) {
         runTheIntakes = false;
         runTheBottomRoller = false;
+        runTheTopRoller = false;
       }
 
 
@@ -159,7 +162,7 @@ int intakeControl() {
         runTheBottomRoller = false;
       }
 
-      totalTimeSpent += 20;
+      totalTimeSpent += 10;
 
     }
 
@@ -193,6 +196,14 @@ void runIntakes (double speed, int stopCondition = 0, int timeOutTime = 1000) {
   intakeStopCondition = stopCondition;
 }
 
+void runJustIntakes(double speed, int stopCondition = 0, int timeOutTime = 1000) {
+  totalTimeSpent = 0;
+  maxAllowedTime = timeOutTime;
+  runTheIntakes = true;
+  intakeSpeed = speed;
+  intakeStopCondition = stopCondition;
+}
+
 void runBottomRoller(double speed) {
   runTheBottomRoller = true;
 
@@ -204,15 +215,19 @@ void runTopRoller(double speed) {
   topRollerSpeed = speed;
 }
 
-void runAllIntakes(double speed, int timeOutTime = 1000) {
+void runAllIntakes(double speed, int stopCondition = 0, int timeOutTime = 1000) {
   totalTimeSpent = 0;
   runTheIntakes = true;
   runTheBottomRoller = true;
-  runTheTopRoller = true;
+  if(stopCondition != 1) {
+    runTheTopRoller = true;
+    topRollerSpeed = speed;
+  }
+  
   intakeSpeed = speed;
   bottomRollerSpeed = speed;
-  topRollerSpeed = speed;
-  intakeStopCondition = 0;
+  
+  intakeStopCondition = stopCondition;
   maxAllowedTime = timeOutTime;
 
 }
@@ -267,11 +282,14 @@ void closeRatchets() {
 void autonSkills() {
   /* AUTON SKILLS */
 
+//testing middle goal stuff
+  
   //driveTo(42.8, 9, 0, 5000, 1.0);
 
   //task::sleep(500000);
 
   //drive
+
 
 //BOTTOM LEFT
 
@@ -280,20 +298,18 @@ void autonSkills() {
   task::sleep(400);
   runTheBottomRoller = false;
 
-  driveTo(55, 18, M_PI, 1000, 1.0);
+  driveTo(55, 18, M_PI, 600, 1.0);
 
   waitUntil(runChassisControl == false);
 
-  turnToPoint(3.15, 35.5, 1000);
-
-  //turnTo(3 * M_PI_4, 1000);
+  turnToPoint(3.15, 35.5, 600);
 
   waitUntil(runChassisControl == false);
 
   driveTo(10, 35, currentAbsoluteOrientation, 2000, 1.0);
 
   openRatchets();
-  task::sleep(500);
+  task::sleep(650);
   closeRatchets();
 
   runIntakes(1.0, 1, 1000);
@@ -301,10 +317,10 @@ void autonSkills() {
   waitUntil(runTheIntakes == false);
 
   openRatchets();
-  task::sleep(700);
+  task::sleep(650);
   closeRatchets();
 
-  runIntakes(1.0, 3, 1000);
+  runIntakes(1.0, 3, 2000);
 
 //line up to BL goal
   driveTo(20, 20, 5 * M_PI_4, 1000, 1.0);
@@ -313,16 +329,10 @@ void autonSkills() {
   driveTo(10, 10, 5 * M_PI_4, 1000, 1.0);
   waitUntil(runChassisControl == false);
 
-  runAllIntakes(1.0, 2000);
-  task::sleep(600);
+  runAllIntakes(1.0);
 
-  waitUntil(RangeFinderE.distance(distanceUnits::in) < 4 && RangeFinderE.distance(distanceUnits::in) > 0.1);
-
-  runTheTopRoller = false;
-  task::sleep(400);
-
-  waitUntil(RangeFinderC.distance(distanceUnits::in) < 4 && RangeFinderC.distance(distanceUnits::in) > 0.1);
-
+  task::sleep(900);
+ 
   stopAllIntakes();
 
 //back up from BL goal
@@ -349,77 +359,272 @@ void autonSkills() {
 
   waitUntil(runChassisControl == false);
 
-  driveTo(24, 71, M_PI_2, 2000, 1.0);
+  driveTo(24, 70, M_PI_2, 2000, 1.0);
 
-  task::sleep(700);
+  task::sleep(600);
 
   openRatchets();
-  task::sleep(500);
+  task::sleep(400);
   closeRatchets();
 
   runIntakes(1.0, 2, 1500);
-//hi
+
   turnTo(M_PI, 1000);
   waitUntil(runChassisControl == false);
 
-  driveTo(9, 71, M_PI, 700, 1.0);
+  driveTo(9, 70, M_PI, 700, 1.0);
   waitUntil(runChassisControl == false);
-//score mid Right goal
+//score mid left goal
   runAllIntakes(1.0);
-  task::sleep(400);
-//wait for a ball in the bottom area
-  waitUntil(RangeFinderC.distance(distanceUnits::in) < 4 && RangeFinderC.distance(distanceUnits::in) > 0.1);
+  task::sleep(700);
 
   stopAllIntakes();
 
-  task::sleep(200);
-
-  openRatchets(false);
-
-  driveTo(24, 71, M_PI, 700, 1.0);
+  driveTo(27, 68, M_PI, 1000, 1.0);
   waitUntil(runChassisControl == false);
+
   turnTo(3 * M_PI_2, 700);
+  waitUntil(runChassisControl == false);
+
+  //release blue ball
+  openRatchets();
   runBottomRoller(-1.0);
   runTopRoller(-1.0);
-  task::sleep(600);
+  task::sleep(700);
   stopBottomRoller();
   stopTopRoller();
-  ratchetIsOpen = false;
 
 //turn toward middle goal
-  turnTo(0, 700);
+  turnTo(0, 900);
 
   waitUntil(runChassisControl == false);
 
-  driveTo(73, 70, 0, 2000, 0.7);
+  driveTo(73, 67, 0, 1700, 0.7);
+
+  task::sleep(600);
+  closeRatchets();
+
+  runIntakes(1.0, 2, 2000);
+
+  task::sleep(200);
+
+//open ratchets to wrap middle goal
+  openRatchets();
+
+  waitUntil(runChassisControl == false);
+  task::sleep(200);
+//close ratchets to wrap middle goal
+  closeRatchets();
+
+//score 1 red and descore 3 blue
+  //descore 1 ball
+  runJustIntakes(1.0);
+  task::sleep(800);
+  runTheIntakes = false;
+  //score the red ball
+  scoreBall();
+
+  runIntakes(1.0, 3, 1200);
+
+  waitUntil(runTheIntakes == false);
+
+  // runAllIntakes(0.5);
+  // task::sleep(500);
+  // stopAllIntakes();
+
+  runJustIntakes(1.0, 1, 1000);
+  waitUntil(runTheIntakes == false);
 
   openRatchets();
-  task::sleep(500);
+
+//back away from middle goal
+  driveTo(33, 70, 0, 1500, 1.0);
+  waitUntil(runChassisControl == false);
+
+  turnTo(5 * M_PI_4, 1200);
+  waitUntil(runChassisControl == false);
+
+  runBottomRoller(-1.0);
+  runTopRoller(-1.0);
+
+  task::sleep(900);
+
+  stopBottomRoller();
+  stopTopRoller();
+
   closeRatchets();
-
-  runIntakes(1.0, 2, 1500);
-
-  task::sleep(400);
-
-  //open ratchets to wrap middle goal
-  openRatchets(false);
+//TOP LEFT
+//turn toward left side opposite side home row ball
+  turnTo(M_PI_2, 1200);
 
   waitUntil(runChassisControl == false);
-  //close ratchets to wrap middle goal
+
+  driveTo(33, 115, M_PI_2, 2000, 1.0);
+
+  task::sleep(600);
+
+  openRatchets();
+
+  task::sleep(600);
+
   closeRatchets();
 
+  runIntakes(1.0, 2, 2500);
+
+  waitUntil(runChassisControl == false);
+
+//drive up to TL goal
+
+  driveTo(20, 115, 3 * M_PI_4, 1200, 1.0);
+
+  waitUntil(runChassisControl == false);
+
+  driveTo(8, 128, 3 * M_PI_4, 900, 1.0);
+  waitUntil(runChassisControl == false);
+
   runAllIntakes(1.0);
+
+  task::sleep(700);
+
+  stopAllIntakes();
+
+  openRatchets();
 
   task::sleep(300);
 
-  waitUntil(RangeFinderE.distance(distanceUnits::in) < 4 && RangeFinderE.distance(distanceUnits::in) > 0.1);
+  closeRatchets();
+  runIntakes(1.0, 3, 1000);
+ 
+  waitUntil(runTheIntakes == false);
 
-  runTheTopRoller = false;
-  task::sleep(200);
+  // runIntakes(1.0, 2, 1500);
 
-  waitUntil(RangeFinderC.distance(distanceUnits::in) < 4 && RangeFinderC.distance(distanceUnits::in) > 0.1);
+  // scoreBall();
+
+  // waitUntil(runTheIntakes == false);
+
+  // openRatchets();
+  // task::sleep(400);
+  // closeRatchets();
+
+  // runIntakes(1.0, 3, 1500);
+
+  // waitUntil(runTheIntakes == false);
+
+
+//Top Mid Goal
+
+//line up to ball on wall
+  openRatchets();
+  driveTo(35, 105, M_PI_2, 1500, 1.0);
+  waitUntil(runChassisControl == false);
+
+  runBottomRoller(-1.0);
+  runTopRoller(-1.0);
+
+  task::sleep(700);
+
+  stopBottomRoller();
+  stopTopRoller();
+
+  closeRatchets();
+
+  turnTo(M_PI, 1000);
+  waitUntil(runChassisControl == false);
+
+  driveTo(6, 103, M_PI, 1200, 1.0);
+  openRatchets();
+
+  waitUntil(runChassisControl == false);
+
+  closeRatchets();
+  runIntakes(1.0, 2, 2000);
+
+//line up to ball above middle goal
+
+  driveTo(40, 90, 0, 1500, 1.0);
+  waitUntil(runChassisControl == false);
+
+  //pick up ball above middle goal
+  driveTo(70, 90, 0, 1000, 1.0);
+  openRatchets();
+
+  task::sleep(800);
+
+  closeRatchets();
+
+  runIntakes(1.0, 3, 2000);
+
+  waitUntil(runChassisControl == false);
+
+  driveTo(67, 127, M_PI_2, 2000, 1.0);
+
+  waitUntil(runChassisControl == false);
+
+  runAllIntakes(1.0);
+  task::sleep(700);
 
   stopAllIntakes();
+
+  openRatchets();
+
+
+//Top Right Goal
+
+//back up 
+  driveTo(67, 115, M_PI_2, 800, 1.0);
+  waitUntil(runChassisControl == false);
+
+  turnTo(3 * M_PI_4, 500);
+
+  runBottomRoller(-1.0);
+  runTopRoller(-1.0);
+
+  task::sleep(400);
+
+  stopBottomRoller();
+  stopTopRoller();
+
+  driveTo(120, 120, 0, 1500, 1.0);
+  openRatchets();
+  task::sleep(1300);
+  closeRatchets();
+
+  runIntakes(1.0, 2, 1000);
+
+  waitUntil(runTheIntakes == false);
+
+  driveTo(126, 105, 0, 1500, 1.0);
+
+  task::sleep(500);
+
+  openRatchets();
+
+  task::sleep(1000);
+
+  closeRatchets();
+  runIntakes(1.0, 3, 2000);
+
+  task::sleep(200);
+
+  driveTo(110, 110, M_PI_4, 1000, 1.0);
+  waitUntil(runChassisControl == false);
+
+  driveTo(126, 126, M_PI_4, 1000, 1.0);
+  waitUntil(runChassisControl == false);
+
+  runAllIntakes(1.0);
+
+  task::sleep(900);
+ 
+  stopAllIntakes();
+  
+
+
+
+
+
+
   
 
 

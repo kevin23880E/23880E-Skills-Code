@@ -265,7 +265,7 @@ int chassisControl() {
       
 
    
-      if(driveError < 0.1 && turnError < 0.003) {
+      if(fabs(driveError) < 0.1 && fabs(turnError) < 0.003) {
         runChassisControl = false;
       }
 
