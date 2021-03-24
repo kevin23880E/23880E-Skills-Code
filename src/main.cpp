@@ -306,7 +306,7 @@ void autonSkills() {
 
   waitUntil(runChassisControl == false);
 
-  driveTo(10, 35, currentAbsoluteOrientation, 2000, 1.0);
+  driveTo(10, 35, currentAbsoluteOrientation, 1700, 1.0);
 
   openRatchets();
   task::sleep(650);
@@ -326,17 +326,36 @@ void autonSkills() {
   driveTo(20, 20, 5 * M_PI_4, 1000, 1.0);
   waitUntil(runChassisControl == false);
 //drive up to BL goal and score
-  driveTo(10, 10, 5 * M_PI_4, 1000, 1.0);
+  driveTo(9.5, 9.5, 5 * M_PI_4, 1000, 1.0);
+
+  runJustIntakes(1.0, 0, 1000);
   waitUntil(runChassisControl == false);
+
+  // runAllIntakes(1.0);
+
+  // task::sleep(900);
+ 
+  // stopAllIntakes();
 
   runAllIntakes(1.0);
 
-  task::sleep(900);
- 
+  task::sleep(700);
+
   stopAllIntakes();
 
+  openRatchets();
+
+  task::sleep(300);
+
+  closeRatchets();
+  runIntakes(1.0, 3, 800);
+ 
+  waitUntil(runTheIntakes == false);
+
+//MIDDLE LEFT
+
 //back up from BL goal
-  driveTo(24, 40, 5 * M_PI_4, 1200, 1.0);
+  driveTo(24, 40, 5 * M_PI_4, 800, 1.0);
   openRatchets(false);
   task::sleep(200);
 
@@ -352,14 +371,14 @@ void autonSkills() {
   stopBottomRoller();
   stopTopRoller();
 
-  ratchetIsOpen = false;
+  closeRatchets();
 
 //turn toward next ball
   turnTo(M_PI_2, 1000);
 
   waitUntil(runChassisControl == false);
 
-  driveTo(24, 70, M_PI_2, 2000, 1.0);
+  driveTo(24, 70, M_PI_2, 1800, 1.0);
 
   task::sleep(600);
 
@@ -369,7 +388,9 @@ void autonSkills() {
 
   runIntakes(1.0, 2, 1500);
 
-  turnTo(M_PI, 1000);
+  turnTo(3 * M_PI_4, 200);
+  task::sleep(200);
+  turnTo(M_PI, 800);
   waitUntil(runChassisControl == false);
 
   driveTo(9, 70, M_PI, 700, 1.0);
@@ -383,14 +404,14 @@ void autonSkills() {
   driveTo(27, 68, M_PI, 1000, 1.0);
   waitUntil(runChassisControl == false);
 
-  turnTo(3 * M_PI_2, 700);
+  turnTo(5 * M_PI_4, 500);
   waitUntil(runChassisControl == false);
 
   //release blue ball
   openRatchets();
   runBottomRoller(-1.0);
   runTopRoller(-1.0);
-  task::sleep(700);
+  task::sleep(500);
   stopBottomRoller();
   stopTopRoller();
 
@@ -438,16 +459,16 @@ void autonSkills() {
   openRatchets();
 
 //back away from middle goal
-  driveTo(33, 70, 0, 1500, 1.0);
+  driveTo(33, 70, 0, 1000, 1.0);
   waitUntil(runChassisControl == false);
 
-  turnTo(5 * M_PI_4, 1200);
+  turnTo(5 * M_PI_4, 1000);
   waitUntil(runChassisControl == false);
 
   runBottomRoller(-1.0);
   runTopRoller(-1.0);
 
-  task::sleep(900);
+  task::sleep(800);
 
   stopBottomRoller();
   stopTopRoller();
@@ -455,17 +476,17 @@ void autonSkills() {
   closeRatchets();
 //TOP LEFT
 //turn toward left side opposite side home row ball
-  turnTo(M_PI_2, 1200);
+  turnTo(M_PI_2, 1100);
 
   waitUntil(runChassisControl == false);
 
-  driveTo(33, 115, M_PI_2, 2000, 1.0);
+  driveTo(32, 115, M_PI_2, 1500, 1.0);
 
   task::sleep(600);
 
   openRatchets();
 
-  task::sleep(600);
+  task::sleep(700);
 
   closeRatchets();
 
@@ -475,7 +496,7 @@ void autonSkills() {
 
 //drive up to TL goal
 
-  driveTo(20, 115, 3 * M_PI_4, 1200, 1.0);
+  driveTo(20, 115, 3 * M_PI_4, 800, 1.0);
 
   waitUntil(runChassisControl == false);
 
@@ -493,7 +514,7 @@ void autonSkills() {
   task::sleep(300);
 
   closeRatchets();
-  runIntakes(1.0, 3, 1000);
+  runIntakes(1.0, 3, 800);
  
   waitUntil(runTheIntakes == false);
 
@@ -514,7 +535,7 @@ void autonSkills() {
 
 //Top Mid Goal
 
-//line up to ball on wall
+//get rid of 2 blue
   openRatchets();
   driveTo(35, 105, M_PI_2, 1500, 1.0);
   waitUntil(runChassisControl == false);
@@ -528,11 +549,11 @@ void autonSkills() {
   stopTopRoller();
 
   closeRatchets();
-
+//line up with ball against wall
   turnTo(M_PI, 1000);
   waitUntil(runChassisControl == false);
 
-  driveTo(6, 103, M_PI, 1200, 1.0);
+  driveTo(7, 103, M_PI, 1200, 1.0);
   openRatchets();
 
   waitUntil(runChassisControl == false);
@@ -542,14 +563,19 @@ void autonSkills() {
 
 //line up to ball above middle goal
 
-  driveTo(40, 90, 0, 1500, 1.0);
+  driveTo(40, 90, M_PI, 1500, 1.0);
+
+  task::sleep(500);
+
+  driveTo(40, 90, 0, 1000, 1.0);
+
   waitUntil(runChassisControl == false);
 
   //pick up ball above middle goal
   driveTo(70, 90, 0, 1000, 1.0);
   openRatchets();
 
-  task::sleep(800);
+  task::sleep(1000);
 
   closeRatchets();
 
@@ -571,7 +597,7 @@ void autonSkills() {
 
 //Top Right Goal
 
-//back up 
+//back up from TopMid
   driveTo(67, 115, M_PI_2, 800, 1.0);
   waitUntil(runChassisControl == false);
 
@@ -585,39 +611,219 @@ void autonSkills() {
   stopBottomRoller();
   stopTopRoller();
 
-  driveTo(120, 120, 0, 1500, 1.0);
+  driveTo(114, 120, 0, 1500, 1.0);
   openRatchets();
-  task::sleep(1300);
+  task::sleep(1500);
   closeRatchets();
 
   runIntakes(1.0, 2, 1000);
 
   waitUntil(runTheIntakes == false);
 
-  driveTo(126, 105, 0, 1500, 1.0);
+  driveTo(126, 100, 0, 1500, 1.0);
 
-  task::sleep(500);
+  task::sleep(300);
 
   openRatchets();
 
-  task::sleep(1000);
+  task::sleep(1200);
 
   closeRatchets();
   runIntakes(1.0, 3, 2000);
 
   task::sleep(200);
 
-  driveTo(110, 110, M_PI_4, 1000, 1.0);
+  driveTo(112, 115, M_PI_4, 1500, 1.0);
   waitUntil(runChassisControl == false);
 
-  driveTo(126, 126, M_PI_4, 1000, 1.0);
+  driveTo(128, 133, M_PI_4, 1500, 1.0);
+  waitUntil(runChassisControl == false);
+//score 2 descore 2
+  runAllIntakes(1.0);
+
+  task::sleep(700);
+
+  stopAllIntakes();
+
+  openRatchets();
+
+  task::sleep(300);
+
+  closeRatchets();
+  runIntakes(1.0, 3, 800);
+ 
+  waitUntil(runTheIntakes == false);
+
+//Middle Right Goal
+
+//back up from TR
+
+  driveTo(90, 90, M_PI_4, 2000, 1.0);
+
+  task::sleep(200);
+
+  openRatchets();
+
+  runBottomRoller(-1.0);
+  runTopRoller(-1.0);
+
+  task::sleep(700);
+
+  stopBottomRoller();
+  stopTopRoller();
+
+  driveTo(90, 90, 3 * M_PI_2, 1200, 1.0);
+  waitUntil(runChassisControl == false);
+
+  driveTo(87, 67, 3 * M_PI_2, 1200, 1.0);
+
+  task::sleep(900);
+
+  closeRatchets();
+
+  runIntakes(1.0, 2, 2000);
+
+  turnTo(7 * M_PI_4, 400);
+  task::sleep(400);
+  turnTo(0, 600);
+
+  waitUntil(runChassisControl == false);
+
+  driveTo(125, 69, 0, 1300, 1.0);
+
+  task::sleep(100);
+
+  openRatchets();
+
+  task::sleep(900);
+
+  closeRatchets();
+
+  runIntakes(1.0, 3, 2000);
+
   waitUntil(runChassisControl == false);
 
   runAllIntakes(1.0);
+  task::sleep(700);
 
-  task::sleep(900);
- 
   stopAllIntakes();
+
+  openRatchets();
+
+//BOTTOM RIGHT
+
+//back away from mid right
+  openRatchets();
+  driveTo(110, 69, 0, 1000, 1.0);
+  waitUntil(runChassisControl == false);
+
+//eject 1 blue ball
+  turnTo(M_PI_4, 500);
+
+  runBottomRoller(-1.0);
+  runTopRoller(-1.0);
+
+  task::sleep(600);
+
+  stopBottomRoller();
+  stopTopRoller();
+
+  closeRatchets();
+
+  driveTo(93, 20, 3 * M_PI_2, 2000, 1.0);
+  
+  task::sleep(600);
+
+  openRatchets();
+
+  task::sleep(1300);
+
+  closeRatchets();
+  runIntakes(1.0, 2, 2000);
+  waitUntil(runChassisControl == false);
+
+  driveTo(124, 35, 0, 1500, 1.0);
+
+  task::sleep(400);
+  openRatchets();
+
+  waitUntil(runChassisControl == false);
+
+  closeRatchets();
+  runIntakes(1.0, 3, 2000);
+
+//line up to BR goal
+
+  driveTo(120, 20, 7 * M_PI_4, 1000, 1.0);
+  waitUntil(runChassisControl == false);
+
+//drive into goal
+
+  driveTo(126, 7, 7 * M_PI_4, 1000, 1.0);
+
+  runJustIntakes(1.0, 0, 1000);
+  waitUntil(runChassisControl == false);
+
+//score 2 descore 2
+  runAllIntakes(1.0);
+
+  task::sleep(700);
+
+  stopAllIntakes();
+
+  openRatchets();
+
+  task::sleep(300);
+
+  closeRatchets();
+  runIntakes(1.0, 3, 800);
+ 
+  waitUntil(runTheIntakes == false);
+
+//BOTTOM MIDDLE
+
+//back up from BR goal
+
+  driveTo(100, 35, 7 * M_PI_4, 2000, 1.0);
+//release 2 blue
+  task::sleep(200);
+
+  openRatchets();
+
+  runBottomRoller(-1.0);
+  runTopRoller(-1.0);
+
+  task::sleep(700);
+
+  stopBottomRoller();
+  stopTopRoller();
+
+  driveTo(65, 48, M_PI, 1600, 1.0);
+
+  openRatchets();
+
+  task::sleep(1600);
+  closeRatchets();
+  runIntakes(1.0, 2, 2000);
+
+//drive up to bottom mid
+
+  driveTo(65, 6, 3 * M_PI_2, 1000, 1.0);
+  waitUntil(runChassisControl == false);
+  runAllIntakes(1.0);
+  task::sleep(700);
+
+  stopAllIntakes();
+
+  //back up
+  driveTo(65, 30, 3 * M_PI_2, 1000, 1.0);
+
+  //126?
+
+
+
+
+
   
 
 
