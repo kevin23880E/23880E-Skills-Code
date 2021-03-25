@@ -313,7 +313,7 @@ void autonSkills() {
   task::sleep(400);
 
   openRatchets();
-  task::sleep(300);
+  task::sleep(350);
   closeRatchets();
 
   runIntakes(1.0, 3, 2000);
@@ -391,7 +391,7 @@ void autonSkills() {
 
 
 //score mid left goal
-  driveTo(9, 70, M_PI, 600, 1.0);
+  driveTo(7, 70, M_PI, 600, 1.0);
   waitUntil(runChassisControl == false);
 
   runAllIntakes(1.0);
@@ -400,6 +400,8 @@ void autonSkills() {
   stopAllIntakes();
 
   driveTo(27, 70, M_PI, 800, 1.0);
+
+  runJustIntakes(1.0, 2, 1000);
   waitUntil(runChassisControl == false);
 
   turnTo(5 * M_PI_4, 500);
@@ -473,7 +475,7 @@ void autonSkills() {
   closeRatchets();
 //TOP LEFT
 //turn toward left side opposite side home row ball
-  turnTo(M_PI_2, 1100);
+  turnTo(M_PI_2, 900);
 
   waitUntil(runChassisControl == false);
 //collect oppostie side home row ball
@@ -493,11 +495,11 @@ void autonSkills() {
 
 //drive up to TL goal
 
-  driveTo(20, 115, 3 * M_PI_4, 800, 1.0);
+  driveTo(20, 115, 3 * M_PI_4, 600, 1.0);
 
   waitUntil(runChassisControl == false);
-
-  driveTo(8, 128, 3 * M_PI_4, 900, 1.0);
+  runJustIntakes(1.0);
+  driveTo(8, 128, 3 * M_PI_4, 700, 1.0);
   waitUntil(runChassisControl == false);
 
   runAllIntakes(1.0);
@@ -534,8 +536,9 @@ void autonSkills() {
 
 //get rid of 2 blue
   openRatchets();
-  driveTo(35, 105, 3 * M_PI_4, 1000, 1.0);
+  driveTo(35, 105, M_PI_2, 1000, 1.0);
 
+  task::sleep(300);
   runBottomRoller(-1.0);
   runTopRoller(-1.0);
 
@@ -548,10 +551,10 @@ void autonSkills() {
 
   closeRatchets();
 //line up with ball against wall
-  turnTo(M_PI, 1000);
+  turnTo(M_PI, 700);
   waitUntil(runChassisControl == false);
 
-  driveTo(7, 103, M_PI, 1200, 1.0);
+  driveTo(7, 103, M_PI, 1000, 1.0);
   openRatchets();
 
   waitUntil(runChassisControl == false);
@@ -581,7 +584,7 @@ void autonSkills() {
 
   waitUntil(runChassisControl == false);
 
-  driveTo(67, 127, M_PI_2, 2000, 1.0);
+  driveTo(67, 127, M_PI_2, 1500, 1.0);
 
   waitUntil(runChassisControl == false);
 
@@ -596,7 +599,7 @@ void autonSkills() {
 //Top Right Goal
 
 //back up from TopMid
-  driveTo(67, 115, M_PI_2, 800, 1.0);
+  driveTo(67, 115, M_PI_2, 650, 1.0);
   waitUntil(runChassisControl == false);
 
   turnTo(3 * M_PI_4, 500);
@@ -618,13 +621,13 @@ void autonSkills() {
 
   waitUntil(runTheIntakes == false);
 
-  driveTo(126, 100, 0, 1500, 1.0);
+  driveTo(126, 100, 0, 1000, 1.0);
 
-  task::sleep(300);
+  task::sleep(200);
 
   openRatchets();
 
-  task::sleep(1200);
+  task::sleep(800);
 
   closeRatchets();
   runIntakes(1.0, 3, 2000);
@@ -634,7 +637,7 @@ void autonSkills() {
   driveTo(112, 115, M_PI_4, 800, 1.0);
   waitUntil(runChassisControl == false);
 
-  driveTo(128, 133, M_PI_4, 1000, 1.0);
+  driveTo(128, 133, M_PI_4, 800, 1.0);
   waitUntil(runChassisControl == false);
 //score 2 descore 2
   runAllIntakes(1.0);
@@ -648,7 +651,7 @@ void autonSkills() {
   task::sleep(300);
 
   closeRatchets();
-  runIntakes(1.0, 3, 800);
+  runIntakes(1.0, 3, 700);
  
   waitUntil(runTheIntakes == false);
 
@@ -673,23 +676,21 @@ void autonSkills() {
   driveTo(90, 90, 3 * M_PI_2, 1200, 1.0);
   waitUntil(runChassisControl == false);
 
-  driveTo(87, 70, 3 * M_PI_2, 1200, 1.0);
+  driveTo(87, 70, 3 * M_PI_2, 1000, 1.0);
 
-  task::sleep(1000);
+  task::sleep(750);
 
   closeRatchets();
 
   runIntakes(1.0, 2, 2000);
 
   turnTo(7 * M_PI_4, 400);
-  task::sleep(400);
-  turnTo(0, 600);
+  task::sleep(200);
+  turnTo(0, 300);
 
   waitUntil(runChassisControl == false);
 
-  driveTo(125, 70, 0, 1300, 1.0);
-
-  task::sleep(100);
+  driveTo(125, 70, 0, 1100, 1.0);
 
   openRatchets();
 
@@ -752,20 +753,20 @@ void autonSkills() {
 
 //line up to BR goal
 
-  driveTo(120, 20, 7 * M_PI_4, 1000, 1.0);
+  driveTo(120, 20, 7 * M_PI_4, 700, 1.0);
   waitUntil(runChassisControl == false);
 
 //drive into goal
 
   driveTo(126, 7, 7 * M_PI_4, 1000, 1.0);
 
-  runJustIntakes(1.0, 0, 1000);
+  runJustIntakes(1.0, 0, 900);
   waitUntil(runChassisControl == false);
 
 //score 2 descore 2
   runAllIntakes(1.0);
 
-  task::sleep(700);
+  task::sleep(650);
 
   stopAllIntakes();
 
@@ -784,10 +785,9 @@ void autonSkills() {
 
   driveTo(100, 35, 7 * M_PI_4, 2000, 1.0);
 //release 2 blue
-  task::sleep(200);
-
+  
   openRatchets();
-
+  task::sleep(200);
   runBottomRoller(-1.0);
   runTopRoller(-1.0);
 
@@ -796,11 +796,11 @@ void autonSkills() {
   stopBottomRoller();
   stopTopRoller();
 
-  driveTo(64, 53, M_PI, 1600, 1.0);
+  driveTo(64, 53, M_PI, 1900, 1.0);
 
   openRatchets();
 
-  task::sleep(1600);
+  task::sleep(1900);
   closeRatchets();
   runIntakes(1.0, 2, 2000);
 
@@ -816,25 +816,7 @@ void autonSkills() {
   //back up
   driveTo(64, 30, 3 * M_PI_2, 1000, 1.0);
 
-  //126?
-
-
-
-
-
-  
-
-
-
-
-
-
-  
-
-
-
-
-
+  //126!
 
 
 }
