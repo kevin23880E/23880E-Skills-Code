@@ -257,7 +257,7 @@ void scoreBall() {
   runTheBottomRoller = true;
   runTheTopRoller = true;
 
-  wait(450, timeUnits::msec);
+  wait(400, timeUnits::msec);
   runTheTopRoller = false;
   runTheBottomRoller = false;
 }
@@ -384,9 +384,10 @@ void autonSkills() {
 
   runIntakes(1.0, 2, 1500);
 
-  turnTo(3 * M_PI_4, 200);
-  task::sleep(200);
-  turnTo(M_PI, 500);
+  // turnTo(3 * M_PI_4, 200);
+  // task::sleep(200);
+  // turnTo(M_PI, 500);
+  driveTo(24, 70, M_PI, 700, 1.0);
   waitUntil(runChassisControl == false);
 
 
@@ -499,7 +500,7 @@ void autonSkills() {
 
   waitUntil(runChassisControl == false);
   runJustIntakes(1.0);
-  driveTo(8, 128, 3 * M_PI_4, 700, 1.0);
+  driveTo(5, 131, 3 * M_PI_4, 700, 1.0);
   waitUntil(runChassisControl == false);
 
   runAllIntakes(1.0);
@@ -554,7 +555,7 @@ void autonSkills() {
   turnTo(M_PI, 700);
   waitUntil(runChassisControl == false);
 
-  driveTo(7, 103, M_PI, 1000, 1.0);
+  driveTo(6, 103, M_PI, 1000, 1.0);
   openRatchets();
 
   waitUntil(runChassisControl == false);
@@ -637,7 +638,7 @@ void autonSkills() {
   driveTo(112, 115, M_PI_4, 800, 1.0);
   waitUntil(runChassisControl == false);
 
-  driveTo(128, 133, M_PI_4, 800, 1.0);
+  driveTo(130, 135, M_PI_4, 800, 1.0);
   waitUntil(runChassisControl == false);
 //score 2 descore 2
   runAllIntakes(1.0);
@@ -659,7 +660,7 @@ void autonSkills() {
 
 //back up from TR
 
-  driveTo(90, 90, M_PI_4, 2000, 1.0);
+  driveTo(87, 90, M_PI_4, 2000, 1.0);
 
   task::sleep(200);
 
@@ -673,7 +674,7 @@ void autonSkills() {
   stopBottomRoller();
   stopTopRoller();
 
-  driveTo(90, 90, 3 * M_PI_2, 1200, 1.0);
+  driveTo(87, 90, 3 * M_PI_2, 1200, 1.0);
   waitUntil(runChassisControl == false);
 
   driveTo(87, 70, 3 * M_PI_2, 1000, 1.0);
@@ -713,7 +714,7 @@ void autonSkills() {
 
 //back away from mid right
   openRatchets();
-  driveTo(110, 69, 0, 700, 1.0);
+  driveTo(93, 69, 0, 700, 1.0);
   waitUntil(runChassisControl == false);
 
 //eject 1 blue ball
@@ -729,7 +730,7 @@ void autonSkills() {
 
   closeRatchets();
 
-  driveTo(93, 20, 3 * M_PI_2, 2000, 1.0);
+  driveTo(93, 17, 3 * M_PI_2, 2000, 1.0);
   
   task::sleep(600);
 
@@ -753,12 +754,12 @@ void autonSkills() {
 
 //line up to BR goal
 
-  driveTo(120, 20, 7 * M_PI_4, 700, 1.0);
+  driveTo(117, 20, 7 * M_PI_4, 1000, 1.0);
   waitUntil(runChassisControl == false);
 
 //drive into goal
 
-  driveTo(126, 7, 7 * M_PI_4, 1000, 1.0);
+  driveTo(126, 5, 7 * M_PI_4, 1000, 1.0);
 
   runJustIntakes(1.0, 0, 900);
   waitUntil(runChassisControl == false);
@@ -863,6 +864,17 @@ double exponentialDrive(double controllerValue) {
 
 }
 
+bool areIntakesOpenInDriver = false;
+
+void openRatchetsInDriver() {
+  LeftIntake.resetPosition();
+  RightIntake.resetPosition();
+}
+
+double leftError = 0;
+double rightError = 0;
+double intakekPDriver = 1.0;
+
 void usercontrol(void) {
 
   double driveAmt;
@@ -897,12 +909,14 @@ void usercontrol(void) {
     
     //L1 runs the intakes and bottom indexer inward
     if(Controller1.ButtonL1.pressing()) {
+      areIntakesOpenInDriver = false;
       LeftIntake.spin(directionType::fwd, 100, velocityUnits::pct);
       RightIntake.spin(directionType::fwd, 100, velocityUnits::pct);
       BottomRoller.spin(directionType::fwd, 100, velocityUnits::pct);
     }
     //L2 runs the intakes and bottom indexer out
     else if(Controller1.ButtonL2.pressing()) {
+      areIntakesOpenInDriver = false;
       LeftIntake.spin(directionType::rev, 100, velocityUnits::pct);
       RightIntake.spin(directionType::rev, 100, velocityUnits::pct);
 
@@ -911,6 +925,11 @@ void usercontrol(void) {
         BottomRoller.spin(directionType::rev, 100, velocityUnits::pct);
       }
       
+    }
+    //open the ratchets is A is pressed and no other intake commands are happening
+    else if(Controller1.ButtonA.pressing() && areIntakesOpenInDriver == false) {
+      areIntakesOpenInDriver = true;
+
     }
     //Else, stop the intakes and bottom indexer
     else {
@@ -936,6 +955,16 @@ void usercontrol(void) {
     //Else, stop the top indexer
     else {
       TopRoller.stop(brakeType::brake);
+    }
+
+
+    //ratchet control
+    if(areIntakesOpenInDriver == true) {
+      leftError = -45 - LeftIntake.position(rotationUnits::deg);
+      rightError = -45 - RightIntake.position(rotationUnits::deg);
+
+      LeftIntake.spin(directionType::fwd, leftError * intakekPDriver, voltageUnits::volt);
+      RightIntake.spin(directionType::fwd, rightError * intakekPDriver, voltageUnits::volt);
     }
 
 
